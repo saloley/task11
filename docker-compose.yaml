@@ -117,6 +117,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_DB: pagila
     volumes:
+      - ${AIRFLOW_PROJ_DIR:-.}/pagila/init-users.sql:/docker-entrypoint-initdb.d/0-init-users.sql
       - ${AIRFLOW_PROJ_DIR:-.}/pagila/pagila-schema.sql:/docker-entrypoint-initdb.d/1-pagila-schema.sql
       - ${AIRFLOW_PROJ_DIR:-.}/pagila/pagila-schema-jsonb.sql:/docker-entrypoint-initdb.d/2-pagila-schema-jsonb.sql
       - ${AIRFLOW_PROJ_DIR:-.}/pagila/pagila-data.sql:/docker-entrypoint-initdb.d/3-pagila-data.sql
@@ -132,6 +133,15 @@ services:
       retries: 5
       start_period: 30s
     restart: always
+    command:     # PUBLICATION AND REPLICATION config for pagila
+      - "postgres"
+      - "-c"
+      - "wal_level=logical"     #  уровень детализации Write-Ahead Log для корректной репликации  
+      - "-c"
+      - "max_wal_senders=10"      # Максимальное количество одновременно активных процессов WAL sender
+      - "-c"
+      - "max_replication_slots=10" # Максимальное количество слотов репликации.
+
 
 
 # Sakila Database (MySQL)
