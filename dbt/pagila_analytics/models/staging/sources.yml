@@ -1,0 +1,383 @@
+version: 2
+
+sources:
+  - name: pagila_raw
+    description: "Raw Pagila data replicated from PostgreSQL via Airbyte"
+    database: PAGILA_SAKILA_DW
+    schema: PAGILA_RAW
+    
+    # Data freshness checks
+    freshness:
+      warn_after: {count: 24, period: hour}
+      error_after: {count: 48, period: hour}
+    
+    # Airbyte adds these columns by default
+    quoting:
+      database: false
+      schema: false
+      identifier: false
+    
+    tables:
+      - name: film
+        description: "Film catalog with ratings, language, and rental information"
+        columns:
+          - name: film_id
+            description: "Primary key for film"
+            tests:
+              - unique
+              - not_null
+          - name: title
+            description: "Title of the film"
+            tests:
+              - not_null
+          - name: description
+            description: "Short description or plot summary"
+          - name: release_year
+            description: "Year the film was released"
+          - name: language_id
+            description: "Foreign key to language"
+            tests:
+              - not_null
+          - name: rental_duration
+            description: "Default rental period in days"
+          - name: rental_rate
+            description: "Cost to rent the film"
+          - name: length
+            description: "Duration in minutes"
+          - name: replacement_cost
+            description: "Cost to replace the film"
+          - name: rating
+            description: "MPAA rating (G, PG, PG-13, R, NC-17)"
+          - name: special_features
+            description: "Special features on the DVD"
+          - name: last_update
+            description: "Last update timestamp"
+      
+      - name: actor
+        description: "List of actors"
+        columns:
+          - name: actor_id
+            description: "Primary key for actor"
+            tests:
+              - unique
+              - not_null
+          - name: first_name
+            description: "Actor first name"
+            tests:
+              - not_null
+          - name: last_name
+            description: "Actor last name"
+            tests:
+              - not_null
+          - name: last_update
+            description: "Last update timestamp"
+      
+      - name: film_actor
+        description: "Bridge table linking films and actors"
+        columns:
+          - name: film_id
+            description: "Foreign key to film"
+            tests:
+              - not_null
+              - relationships:
+                  to: source('pagila_raw', 'film')
+                  field: film_id
+          - name: actor_id
+            description: "Foreign key to actor"
+            tests:
+              - not_null
+              - relationships:
+                  to: source('pagila_raw', 'actor')
+                  field: actor_id
+          - name: last_update
+            description: "Last update timestamp"
+        tests:
+          - unique:
+              column_name: "(film_id || '-' || actor_id)"
+      
+      - name: category
+        description: "Film categories/genres"
+        columns:
+          - name: category_id
+            description: "Primary key for category"
+            tests:
+              - unique
+              - not_null
+          - name: name
+            description: "Category name"
+            tests:
+              - not_null
+          - name: last_update
+            description: "Last update timestamp"
+      
+      - name: film_category
+        description: "Bridge table linking films and categories"
+        columns:
+          - name: film_id
+            description: "Foreign key to film"
+            tests:
+              - not_null
+              - relationships:
+                  to: source('pagila_raw', 'film')
+                  field: film_id
+          - name: category_id
+            description: "Foreign key to category"
+            tests:
+              - not_null
+              - relationships:
+                  to: source('pagila_raw', 'category')
+                  field: category_id
+          - name: last_update
+            description: "Last update timestamp"
+        tests:
+          - unique:
+              column_name: "(film_id || '-' || category_id)"
+      
+      - name: rental
+        description: "Rental transactions"
+        columns:
+          - name: rental_id
+            description: "Primary key for rental"
+            tests:
+              - unique
+              - not_null
+          - name: rental_date
+            description: "Date and time rental was made"
+            tests:
+              - not_null
+          - name: inventory_id
+            description: "Foreign key to inventory"
+            tests:
+              - not_null
+          - name: customer_id
+            description: "Foreign key to customer"
+            tests:
+              - not_null
+          - name: return_date
+            description: "Date and time item was returned"
+          - name: staff_id
+            description: "Staff member who processed rental"
+            tests:
+              - not_null
+          - name: last_update
+            description: "Last update timestamp"
+      
+      - name: customer
+        description: "Customer information"
+        columns:
+          - name: customer_id
+            description: "Primary key for customer"
+            tests:
+              - unique
+              - not_null
+          - name: store_id
+            description: "Foreign key to store"
+            tests:
+              - not_null
+          - name: first_name
+            description: "Customer first name"
+            tests:
+              - not_null
+          - name: last_name
+            description: "Customer last name"
+            tests:
+              - not_null
+          - name: email
+            description: "Customer email address"
+          - name: address_id
+            description: "Foreign key to address"
+            tests:
+              - not_null
+          - name: active
+            description: "Whether customer is active (0/1)"
+          - name: create_date
+            description: "Date customer was added"
+          - name: last_update
+            description: "Last update timestamp"
+      
+      - name: inventory
+        description: "Inventory items available for rental"
+        columns:
+          - name: inventory_id
+            description: "Primary key for inventory"
+            tests:
+              - unique
+              - not_null
+          - name: film_id
+            description: "Foreign key to film"
+            tests:
+              - not_null
+              - relationships:
+                  to: source('pagila_raw', 'film')
+                  field: film_id
+          - name: store_id
+            description: "Foreign key to store"
+            tests:
+              - not_null
+          - name: last_update
+            description: "Last update timestamp"
+      
+      - name: payment
+        description: "Payment transactions"
+        columns:
+          - name: payment_id
+            description: "Primary key for payment"
+            tests:
+              - unique
+              - not_null
+          - name: customer_id
+            description: "Foreign key to customer"
+            tests:
+              - not_null
+          - name: staff_id
+            description: "Staff member who processed payment"
+            tests:
+              - not_null
+          - name: rental_id
+            description: "Foreign key to rental"
+            tests:
+              - not_null
+          - name: amount
+            description: "Payment amount"
+            tests:
+              - not_null
+          - name: payment_date
+            description: "Date and time payment was made"
+            tests:
+              - not_null
+      
+      - name: address
+        description: "Address information"
+        columns:
+          - name: address_id
+            description: "Primary key for address"
+            tests:
+              - unique
+              - not_null
+          - name: address
+            description: "Street address"
+            tests:
+              - not_null
+          - name: address2
+            description: "Additional address information"
+          - name: district
+            description: "District or region"
+            tests:
+              - not_null
+          - name: city_id
+            description: "Foreign key to city"
+            tests:
+              - not_null
+          - name: postal_code
+            description: "Postal code"
+          - name: phone
+            description: "Phone number"
+            tests:
+              - not_null
+          - name: last_update
+            description: "Last update timestamp"
+      
+      - name: city
+        description: "City information"
+        columns:
+          - name: city_id
+            description: "Primary key for city"
+            tests:
+              - unique
+              - not_null
+          - name: city
+            description: "City name"
+            tests:
+              - not_null
+          - name: country_id
+            description: "Foreign key to country"
+            tests:
+              - not_null
+          - name: last_update
+            description: "Last update timestamp"
+      
+      - name: country
+        description: "Country information"
+        columns:
+          - name: country_id
+            description: "Primary key for country"
+            tests:
+              - unique
+              - not_null
+          - name: country
+            description: "Country name"
+            tests:
+              - not_null
+          - name: last_update
+            description: "Last update timestamp"
+      
+      - name: store
+        description: "Store information"
+        columns:
+          - name: store_id
+            description: "Primary key for store"
+            tests:
+              - unique
+              - not_null
+          - name: manager_staff_id
+            description: "Foreign key to staff (manager)"
+            tests:
+              - not_null
+          - name: address_id
+            description: "Foreign key to address"
+            tests:
+              - not_null
+          - name: last_update
+            description: "Last update timestamp"
+      
+      - name: staff
+        description: "Staff information"
+        columns:
+          - name: staff_id
+            description: "Primary key for staff"
+            tests:
+              - unique
+              - not_null
+          - name: first_name
+            description: "Staff first name"
+            tests:
+              - not_null
+          - name: last_name
+            description: "Staff last name"
+            tests:
+              - not_null
+          - name: address_id
+            description: "Foreign key to address"
+            tests:
+              - not_null
+          - name: email
+            description: "Staff email address"
+          - name: store_id
+            description: "Foreign key to store"
+            tests:
+              - not_null
+          - name: active
+            description: "Whether staff is active"
+          - name: username
+            description: "Username for system login"
+            tests:
+              - not_null
+          - name: password
+            description: "Password hash"
+          - name: last_update
+            description: "Last update timestamp"
+      
+      - name: language
+        description: "Language information"
+        columns:
+          - name: language_id
+            description: "Primary key for language"
+            tests:
+              - unique
+              - not_null
+          - name: name
+            description: "Language name"
+            tests:
+              - not_null
+          - name: last_update
+            description: "Last update timestamp"
