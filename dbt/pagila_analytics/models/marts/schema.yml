@@ -1,0 +1,112 @@
+version: 2
+
+models:
+  # Dimension Models
+  - name: dim_film
+    description: "Film dimension with category information"
+    columns:
+      - name: film_id
+        description: "Primary key for film"
+        tests:
+          - unique
+          - not_null
+      - name: title
+        description: "Film title"
+        tests:
+          - not_null
+      - name: category_name
+        description: "Film category/genre"
+  
+  - name: dim_actor
+    description: "Actor dimension with performance statistics"
+    columns:
+      - name: actor_id
+        description: "Primary key for actor"
+        tests:
+          - unique
+          - not_null
+      - name: full_name
+        description: "Actor's full name"
+        tests:
+          - not_null
+      - name: total_films
+        description: "Total number of films actor appeared in"
+  
+  - name: dim_customer
+    description: "Customer dimension with location information"
+    columns:
+      - name: customer_id
+        description: "Primary key for customer"
+        tests:
+          - unique
+          - not_null
+      - name: full_name
+        description: "Customer's full name"
+        tests:
+          - not_null
+      - name: full_location
+        description: "Full location string (City, Country)"
+  
+  - name: dim_date
+    description: "Date dimension for time-based analysis"
+    columns:
+      - name: date_key
+        description: "Primary key - the actual date"
+        tests:
+          - unique
+          - not_null
+      - name: year
+        description: "Year number"
+        tests:
+          - not_null
+      - name: month
+        description: "Month number (1-12)"
+        tests:
+          - not_null
+      - name: is_weekend
+        description: "Boolean flag for weekend days"
+  
+  # Fact Models
+  - name: fact_rental
+    description: "Rental transaction fact table"
+    columns:
+      - name: rental_id
+        description: "Primary key for rental transaction"
+        tests:
+          - unique
+          - not_null
+      - name: rental_date_key
+        description: "Foreign key to date dimension"
+        tests:
+          - not_null
+      - name: customer_id
+        description: "Foreign key to customer dimension"
+        tests:
+          - not_null
+      - name: film_id
+        description: "Foreign key to film dimension"
+        tests:
+          - not_null
+      - name: total_rental_revenue
+        description: "Total revenue from rental including late fees"
+  
+  - name: fact_revenue
+    description: "Revenue fact table aggregated by payment"
+    columns:
+      - name: payment_id
+        description: "Primary key for payment transaction"
+        tests:
+          - unique
+          - not_null
+      - name: payment_date_key
+        description: "Foreign key to date dimension"
+        tests:
+          - not_null
+      - name: customer_id
+        description: "Foreign key to customer dimension"
+        tests:
+          - not_null
+      - name: payment_amount
+        description: "Total payment amount"
+        tests:
+          - not_null

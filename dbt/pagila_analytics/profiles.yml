@@ -1,0 +1,28 @@
+pagila_analytics:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: CXGOTXO-BX83852
+      user: OLEJKUS
+      password: 22890062hkL909
+      role: AIRFLOW_DEV_ROLE
+      database: PAGILA_SAKILA_DW
+      warehouse: COMPUTE_WH
+      schema: DBT_ANALYTICS
+      threads: 4
+      client_session_keep_alive: False
+      query_tag: dbt_pagila_analytics
+    
+    prod:
+      type: snowflake
+      account: CXGOTXO-BX83852
+      user: OLEJKUS
+      password: 22890062hkL909
+      role: AIRFLOW_DEV_ROLE
+      database: PAGILA_SAKILA_DW
+      warehouse: COMPUTE_WH
+      schema: DBT_ANALYTICS
+      threads: 8
+      client_session_keep_alive: False
+      query_tag: dbt_pagila_analytics_prod
