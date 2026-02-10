@@ -1,5 +1,5 @@
 
-  create or replace   view PAGILA_SAKILA_DW.DBT_ANALYTICS_intermediate.int_customer_enriched
+  create or replace   view PAGILA_SAKILA_DW.INTERMEDIATE.int_customer_enriched
   
   
   
@@ -8,19 +8,19 @@
     
 
 with customers as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_customer
+    select * from PAGILA_SAKILA_DW.STAGING.stg_customer
 ),
 
 addresses as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_address
+    select * from PAGILA_SAKILA_DW.STAGING.stg_address
 ),
 
 cities as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_city
+    select * from PAGILA_SAKILA_DW.STAGING.stg_city
 ),
 
 countries as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_country
+    select * from PAGILA_SAKILA_DW.STAGING.stg_country
 ),
 
 customer_enriched as (

@@ -2,22 +2,22 @@
   
     
 
-create or replace transient table PAGILA_SAKILA_DW.DBT_ANALYTICS_marts.dim_film
+create or replace transient table PAGILA_SAKILA_DW.MARTS.dim_film
     
     
     
     as (
 
 with films as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_film
+    select * from PAGILA_SAKILA_DW.STAGING.stg_film
 ),
 
 film_categories as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_film_category
+    select * from PAGILA_SAKILA_DW.STAGING.stg_film_category
 ),
 
 categories as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_category
+    select * from PAGILA_SAKILA_DW.STAGING.stg_category
 ),
 
 film_with_category as (

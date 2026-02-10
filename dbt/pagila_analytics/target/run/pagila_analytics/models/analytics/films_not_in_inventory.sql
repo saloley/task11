@@ -1,5 +1,5 @@
 
-  create or replace   view PAGILA_SAKILA_DW.DBT_ANALYTICS_analytics.films_not_in_inventory
+  create or replace   view PAGILA_SAKILA_DW.ANALYTICS.films_not_in_inventory
   
   
   
@@ -11,19 +11,19 @@
 -- Identifies films that exist in catalog but have no inventory copies
 
 with films as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_film
+    select * from PAGILA_SAKILA_DW.STAGING.stg_film
 ),
 
 inventory as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_inventory
+    select * from PAGILA_SAKILA_DW.STAGING.stg_inventory
 ),
 
 film_categories as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_film_category
+    select * from PAGILA_SAKILA_DW.STAGING.stg_film_category
 ),
 
 categories as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_category
+    select * from PAGILA_SAKILA_DW.STAGING.stg_category
 ),
 
 films_without_inventory as (

@@ -4,15 +4,15 @@
 -- Shows the distribution of films across different categories
 
 with film_category as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_film_category
+    select * from PAGILA_SAKILA_DW.STAGING.stg_film_category
 ),
 
 categories as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_category
+    select * from PAGILA_SAKILA_DW.STAGING.stg_category
 ),
 
 films as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_film
+    select * from PAGILA_SAKILA_DW.STAGING.stg_film
 ),
 
 category_distribution as (

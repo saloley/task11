@@ -1,11 +1,11 @@
 
 
 with actors as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_actor
+    select * from PAGILA_SAKILA_DW.STAGING.stg_actor
 ),
 
 film_actor as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_film_actor
+    select * from PAGILA_SAKILA_DW.STAGING.stg_film_actor
 ),
 
 actor_stats as (
