@@ -4,23 +4,23 @@
 -- Identifies the most popular actors in children's films (G and PG rated)
 
 with rentals as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_rental
+    select * from PAGILA_SAKILA_DW.STAGING.stg_rental
 ),
 
 inventory as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_inventory
+    select * from PAGILA_SAKILA_DW.STAGING.stg_inventory
 ),
 
 films as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_film
+    select * from PAGILA_SAKILA_DW.STAGING.stg_film
 ),
 
 film_actor as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_film_actor
+    select * from PAGILA_SAKILA_DW.STAGING.stg_film_actor
 ),
 
 actors as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_actor
+    select * from PAGILA_SAKILA_DW.STAGING.stg_actor
 ),
 
 children_film_actors as (

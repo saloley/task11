@@ -1,5 +1,5 @@
 
-  create or replace   view PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_film_actor
+  create or replace   view PAGILA_SAKILA_DW.STAGING.stg_film_actor
   
   
   

@@ -1,7 +1,7 @@
 
 
 with customer_enriched as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_intermediate.int_customer_enriched
+    select * from PAGILA_SAKILA_DW.INTERMEDIATE.int_customer_enriched
 ),
 
 dim_customer as (

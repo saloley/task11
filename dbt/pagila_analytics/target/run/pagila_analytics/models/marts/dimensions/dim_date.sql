@@ -2,7 +2,7 @@
   
     
 
-create or replace transient table PAGILA_SAKILA_DW.DBT_ANALYTICS_marts.dim_date
+create or replace transient table PAGILA_SAKILA_DW.MARTS.dim_date
     
     
     

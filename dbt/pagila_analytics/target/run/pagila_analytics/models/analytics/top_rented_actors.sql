@@ -1,5 +1,5 @@
 
-  create or replace   view PAGILA_SAKILA_DW.DBT_ANALYTICS_analytics.top_rented_actors
+  create or replace   view PAGILA_SAKILA_DW.ANALYTICS.top_rented_actors
   
   
   
@@ -11,19 +11,19 @@
 -- Identifies the most popular actors based on rental counts
 
 with rentals as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_rental
+    select * from PAGILA_SAKILA_DW.STAGING.stg_rental
 ),
 
 inventory as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_inventory
+    select * from PAGILA_SAKILA_DW.STAGING.stg_inventory
 ),
 
 film_actor as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_film_actor
+    select * from PAGILA_SAKILA_DW.STAGING.stg_film_actor
 ),
 
 actors as (
-    select * from PAGILA_SAKILA_DW.DBT_ANALYTICS_staging.stg_actor
+    select * from PAGILA_SAKILA_DW.STAGING.stg_actor
 ),
 
 actor_rentals as (
